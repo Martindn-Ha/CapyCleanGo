@@ -1,42 +1,54 @@
-import { StyleSheet, Button, TouchableOpacity, Alert} from 'react-native';
-import React, { useEffect, useState, useRef } from 'react';
-import EditScreenInfo from '@/components/EditScreenInfo';
+import { StyleSheet, Button, TouchableOpacity } from 'react-native';
+import React, { useState, useRef } from 'react';
 import { Text, View } from '@/components/Themed';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Image } from 'expo-image';
-import {useRouter} from 'expo-router';
+import { useRouter } from 'expo-router';
+import { predictTrash } from '@/api/predict';
 
-export default function start() {
+export default function Start() {
+  // Camera and Permission State
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [uri, setUri] = useState<string | null>(null);
   const cameraRef = useRef<CameraView>(null);
-  const [previewUri, setPreviewUri] = useState(false)
+  const [previewUri, setPreviewUri] = useState(false);
+
+  // Prediction & UI State
+  const [isPredicting, setIsPredicting] = useState(false);
+  const [prediction, setPrediction] = useState('');
+  const [loading, setLoading] = useState(false);
+  // New state variable for the predicted image URL
+  const [predictedImgUri, setPredictedImgUri] = useState<string | null>(null);
+
   const router = useRouter();
 
+  // Permission Check
   if (!permission) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Text style={styles.message}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="Grant Permission" />
       </View>
     );
   }
 
+  // Toggle between front and back camera
   function toggleCameraFacing() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
 
+  // Capture the photo using the camera reference
   const handleCapture = async () => {
     const photo = await cameraRef.current?.takePictureAsync();
-    if(!cameraRef.current){
+    if (!cameraRef.current) {
       console.error("cameraRef is not defined");
     }
     if (photo?.uri) {
@@ -48,16 +60,98 @@ export default function start() {
     }
   };
 
+  // Reset the image preview so the user can retake the photo
   const handleRetry = () => {
     setUri(null);
     setPreviewUri(false);
-  }
+    setIsPredicting(false);
+    setPrediction('');
+    setPredictedImgUri(null);
+  };
 
+  // Reset to default view after displaying results
+  const handleReset = () => {
+    setUri(null);
+    setPreviewUri(false);
+    setIsPredicting(false);
+    setPrediction('');
+    setPredictedImgUri(null);
+  };
+
+  // Optional: Navigate home (if needed)
   const handleNav = () => {
     router.push("/");
+  };
+
+  // When "Use" is pressed, call the prediction API with the captured image
+  const handleUse = async () => {
+    if (uri) {
+      setIsPredicting(true);
+      setLoading(true);
+      try {
+        const result = await predictTrash({ uri });
+        console.log('Filtered prediction result:', result);
+        
+        // Process the returned response:
+        // We assume result.data is an array with four elements, where:
+        // - Index 2: is the image object from which we extract `url`
+        // - Index 3: is the text message to display
+        if (result && Array.isArray(result.data) && result.data.length >= 4) {
+          const imageObj = result.data[2];
+          const message = result.data[3];
+          // Update predictedImgUri only if the image object contains a valid URL
+          if (imageObj && imageObj.url) {
+            setPredictedImgUri(imageObj.url);
+          }
+          // Set the text prediction using the message from the response
+          setPrediction(message);
+        } else {
+          // Fallback if the structure is unexpected
+          setPrediction(JSON.stringify(result, null, 2));
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error('Prediction failed:', error.message);
+          setPrediction(`Error: ${error.message}`);
+        } else {
+          console.error('Prediction failed:', error);
+          setPrediction(`Error: ${JSON.stringify(error)}`);
+        }
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      console.error("No image URI available to use.");
+    }
+  };
+
+  // If prediction mode is enabled, show the predicted image (if available) with prediction result
+  if (isPredicting) {
+    return (
+      <View style={styles.container}>
+        {/* If predictedImgUri is available, show that image; otherwise fallback to the captured image */}
+        {predictedImgUri ? (
+          <Image source={{ uri: predictedImgUri }} style={styles.previewImage} />
+        ) : (
+          uri && <Image source={{ uri }} style={styles.previewImage} />
+        )}
+        {loading ? (
+          <Text style={styles.statusText}>Loading...</Text>
+        ) : (
+          <>
+            <Text style={styles.statusText}>{prediction}</Text>
+            <View style={styles.actionButtons}>
+              <Button title="Retake" onPress={handleRetry} />
+              <Button title="Reset" onPress={handleReset} />
+            </View>
+          </>
+        )}
+      </View>
+    );
   }
 
-  if(previewUri && uri){
+  // When a photo has been captured (preview mode), show the preview with "Retake" and "Use" buttons
+  if (previewUri && uri) {
     return (
       <View style={styles.container}>
         <Image source={{ uri }} style={styles.camera} />
@@ -65,11 +159,15 @@ export default function start() {
           <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
             <Text style={styles.flipIcon}>Retake</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.useButton} onPress={handleUse}>
+            <Text style={styles.useButtonText}>Use</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
 
+  // Main Camera View
   return (
     <View style={styles.container}>
       <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
@@ -80,7 +178,7 @@ export default function start() {
           <TouchableOpacity style={styles.captureButton}>
             <FontAwesome name="circle" style={styles.captureIcon} onPress={handleCapture} />
           </TouchableOpacity>
-          <TouchableOpacity  onPress={handleNav} >
+          <TouchableOpacity onPress={handleNav}>
             <FontAwesome name="home" style={styles.flipIcon} />
           </TouchableOpacity>
         </View>
@@ -102,6 +200,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
+  previewImage: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -111,6 +215,12 @@ const styles = StyleSheet.create({
     bottom: 30,
     width: '100%',
     paddingHorizontal: 20,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 20,
   },
   flipButton: {
     alignItems: 'center',
@@ -123,13 +233,30 @@ const styles = StyleSheet.create({
   captureButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute', 
+    position: 'absolute',
     bottom: 30,
-    left: 0, 
-    right: 0, 
+    left: 0,
+    right: 0,
   },
   captureIcon: {
     color: 'white',
-    fontSize: 70, 
+    fontSize: 70,
+  },
+  useButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#007AFF',
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  useButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  statusText: {
+    textAlign: 'center',
+    marginVertical: 10,
+    paddingHorizontal: 20,
   },
 });
