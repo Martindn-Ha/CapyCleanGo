@@ -17,9 +17,9 @@ export default function Start() {
             style={styles.background}
         >
             <View style={styles.container}>
-                <Text style={styles.title}>CapyClean!</Text>
+                <Image source={require("../../assets/images/CapyClean!.png")} style={styles.capyCleanImage}/>
                 <Image source={require("../../assets/images/capy.png")} style={styles.capyImage}/>
-                <Text style={{fontSize: 30}}>Help glip clean the Earth!</Text>
+                <Text style={{fontSize: 30}}>Help Glip clean the Earth!</Text>
                 <TouchableOpacity style={styles.startButton} onPress={handleStart}>
                     <Text style={{fontSize: 40, color: "black"}}>Start</Text>
                 </TouchableOpacity>
@@ -60,6 +60,12 @@ const styles = StyleSheet.create({
         width: 350,
         height: 350,
         resizeMode: 'contain', 
+    },
+    capyCleanImage: {
+        marginTop: 70, 
+        width: 400,   
+        height: 150,     
+        resizeMode: 'stretch',
     }
 })
 
