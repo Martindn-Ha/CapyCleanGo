@@ -4,9 +4,18 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import { navigate } from 'expo-router/build/global-state/routing';
 import {useRouter} from 'expo-router';
+import { registerIncrement } from '@/app/pointsManager';
+
 
 export default function Start() {
     const [points, setPoints] = useState(0);
+  
+    const incrementPoints = () => setPoints((prev) => prev + 1);
+  
+    useEffect(() => {
+      registerIncrement(incrementPoints);
+    }, []);
+    
     return (
         <ImageBackground 
             source={require("../../assets/images/space-background.jpg")} 

@@ -7,6 +7,8 @@ import Entypo from '@expo/vector-icons/Entypo';import { Image } from 'expo-image
 import { useRouter } from 'expo-router';
 import { predictTrash } from '@/api/predict';
 import { Spinner } from "@/components/ui/spinner";
+import { callIncrement } from '@/app/pointsManager';
+
 
 export default function Start() {
   // Camera and Permission State
@@ -92,6 +94,7 @@ export default function Start() {
           setPredictedImgUri(predictedImgUri);
         }
         setPrediction(prediction);
+        callIncrement();
       } catch (error) {
         if (error instanceof Error) {
           console.error('Prediction failed:', error.message);
