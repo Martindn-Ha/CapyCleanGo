@@ -24,12 +24,12 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        headerShown: false,
       }}>
-      <Tabs.Screen
-        name="index"
+        <Tabs.Screen
+        name="start"
         options={{
-          title: 'Home',
+          title: 'start-page',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
