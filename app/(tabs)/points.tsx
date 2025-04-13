@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
     background: {
         flex: 1,
-        resizeMode: 'cover', // or 'contain', depending on how you want the image to be displayed
+        resizeMode: 'cover', 
         justifyContent: 'center',
     },
     container: {
@@ -52,12 +52,12 @@ const styles = StyleSheet.create({
     capyImage: {
         width: 300,
         height: 300,
-        resizeMode: 'contain', // Adjust this depending on how you want the image to be displayed
+        resizeMode: 'contain', 
     },
     avatar: {
         width: 120,
         height: 120,
-        borderRadius: 60, // Half of width/height for circle
+        borderRadius: 60, 
         marginVertical: 20,
         resizeMode: 'cover',
       }

@@ -14,7 +14,7 @@ export async function predictTrash(imageResource?: any) {
     type: 'image/jpeg',
   } as any);
 
-  formData.append('conf_threshold', '0.3');
+  formData.append('conf_threshold', '0.36');
 
   const apiUrl =
     Constants.expoConfig?.extra?.apiUrl ||

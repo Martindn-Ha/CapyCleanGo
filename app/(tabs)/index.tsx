@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     },
     background: {
         flex: 1,
-        resizeMode: 'cover', // or 'contain', depending on how you want the image to be displayed
+        resizeMode: 'cover', 
         justifyContent: 'center',
     },
     container: {
@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     capyImage: {
-        width: 300,
-        height: 300,
-        resizeMode: 'contain', // Adjust this depending on how you want the image to be displayed
+        width: 350,
+        height: 350,
+        resizeMode: 'contain', 
     }
 })
 
