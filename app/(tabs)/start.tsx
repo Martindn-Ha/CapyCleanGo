@@ -6,6 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { predictTrash } from '@/api/predict';
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Start() {
   // Camera and Permission State
@@ -118,7 +119,7 @@ export default function Start() {
           uri && <Image source={{ uri }} style={styles.previewImage} />
         )}
         {loading ? (
-          <Text style={styles.statusText}>Loading...</Text>
+          <Spinner size="small" />
         ) : (
           <>
             <Text style={styles.statusText}>{prediction}</Text>
