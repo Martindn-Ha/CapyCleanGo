@@ -21,7 +21,7 @@ export default function Start() {
                 <Image source={require("../../assets/images/capy.png")} style={styles.capyImage}/>
                 <Text style={{fontSize: 30}}>Help Glip clean the Earth!</Text>
                 <TouchableOpacity style={styles.startButton} onPress={handleStart}>
-                    <Text style={{fontSize: 40, color: "black"}}>Start</Text>
+                    <Text style={{fontSize: 40, color: "black"}}>Go!</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
