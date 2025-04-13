@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { View, Button, Text, Image as RNImage } from 'react-native';
 import { predictTrash } from '@/api/predict'; // Import the API helper function
-import Constants from 'expo-constants';
 
 // Import the default image from your assets folder
 const defaultImage = require('@/assets/images/IMG_7457.jpg');

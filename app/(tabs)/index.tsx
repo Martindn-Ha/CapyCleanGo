@@ -1,126 +1,66 @@
-import { StyleSheet, Button, TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, Button, TouchableOpacity, Alert,ImageBackground, Image} from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Image } from 'expo-image';
+import { navigate } from 'expo-router/build/global-state/routing';
+import {useRouter} from 'expo-router';
 
-export default function App() {
-  const [facing, setFacing] = useState<CameraType>('back');
-  const [permission, requestPermission] = useCameraPermissions();
-  const [uri, setUri] = useState<string | null>(null);
-  const cameraRef = useRef<CameraView>(null);
-  const [previewUri, setPreviewUri] = useState(false)
+export default function Start() {
+    const router = useRouter();   
 
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View />;
-  }
-
-  if (!permission.granted) {
-    // Camera permissions are not granted yet.
+    const handleStart = () => {
+        router.push("/(tabs)/start");
+    };
     return (
-      <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
+        <ImageBackground 
+            source={require("../../assets/images/space-background.jpg")} 
+            style={styles.background}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>CapyClean!</Text>
+                <Image source={require("../../assets/images/capy.png")} style={styles.capyImage}/>
+                <Text style={{fontSize: 30}}>Help glip clean the Earth!</Text>
+                <TouchableOpacity style={styles.startButton} onPress={handleStart}>
+                    <Text style={{fontSize: 40, color: "black"}}>Start</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
     );
-  }
-
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
-
-  const handleCapture = async () => {
-    const photo = await cameraRef.current?.takePictureAsync();
-    if(!cameraRef.current){
-      console.error("cameraRef is not defined");
-    }
-    if (photo?.uri) {
-      setUri(photo.uri);
-      setPreviewUri(true);
-      console.log("photo", photo);
-    } else {
-      console.error("Failed to capture photo", Error);
-    }
-  };
-
-  const handleRetry = () => {
-    setUri(null);
-    setPreviewUri(false);
-  }
-
-  if(previewUri && uri){
-    return (
-      <View style={styles.container}>
-        <Image source={{ uri }} style={styles.camera} />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
-            <Text style={styles.flipIcon}>Retake</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.flipButton} onPress={toggleCameraFacing}>
-            <FontAwesome name="refresh" style={styles.flipIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.captureButton}>
-            <FontAwesome name="circle" style={styles.captureIcon} onPress={handleCapture} />
-          </TouchableOpacity>
-        </View>
-      </CameraView>
-    </View>
-  );
 }
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  message: {
-    textAlign: 'center',
-    paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-    width: '100%',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    bottom: 30,
-    width: '100%',
-    paddingHorizontal: 20,
-  },
-  flipButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  flipIcon: {
-    fontSize: 30,
-    color: 'white',
-  },
-  captureButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute', 
-    bottom: 30,
-    left: 0, 
-    right: 0, 
-  },
-  captureIcon: {
-    color: 'white',
-    fontSize: 70, 
-  },
-});
+    title: {
+        fontSize: 50,
+        fontWeight: 'bold',
+        marginTop: "20%",
+    },
+    background: {
+        flex: 1,
+        resizeMode: 'cover', // or 'contain', depending on how you want the image to be displayed
+        justifyContent: 'center',
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: "transparent",
+    },
+    startButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        backgroundColor: 'white',
+        width: 180,
+        height: 60,
+        marginTop: "auto",
+        marginBottom: "20%",
+        borderRadius: 10,
+    },
+    capyImage: {
+        width: 300,
+        height: 300,
+        resizeMode: 'contain', // Adjust this depending on how you want the image to be displayed
+    }
+})
+
+
