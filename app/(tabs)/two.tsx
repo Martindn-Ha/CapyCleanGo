@@ -1,31 +1,50 @@
-import { StyleSheet } from 'react-native';
+// frontend/src/components/PredictComponent.tsx
+import React, { useState } from 'react';
+import { View, Button, Text, Image as RNImage } from 'react-native';
+import { predictTrash } from '@/api/predict'; // Import the API helper function
+import Constants from 'expo-constants';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+// Import the default image from your assets folder
+const defaultImage = require('@/assets/images/IMG_7457.jpg');
 
-export default function TabTwoScreen() {
+const PredictComponent = () => {
+  const [prediction, setPrediction] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+
+  // The handlePredict function now calls predictTrash and uses its returned value.
+  const handlePredict = async () => {
+    setLoading(true);
+    try {
+      // Call the predictTrash API helper function with the default image.
+      const result = await predictTrash(defaultImage);
+      console.log('Filtered prediction result:', result);
+      setPrediction(JSON.stringify(result, null, 2));
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Prediction failed:', error.message);
+        setPrediction(`Error: ${error.message}`);
+      } else {
+        console.error('Prediction failed:', error);
+        setPrediction(`Error: ${JSON.stringify(error)}`);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
+    <View style={{ padding: 20 }}>
+      <RNImage
+        source={defaultImage}
+        style={{ width: 200, height: 200, marginBottom: 20 }}
+      />
+      <Button title="Predict" onPress={handlePredict} disabled={loading} />
+      {loading && <Text style={{ marginTop: 10 }}>Loading...</Text>}
+      {prediction !== '' && (
+        <Text style={{ marginTop: 10 }}>{prediction}</Text>
+      )}
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+export default PredictComponent;
