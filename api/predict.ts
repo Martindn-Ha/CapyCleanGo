@@ -41,7 +41,17 @@ export async function predictTrash(imageResource?: any) {
   if (jsonResponse && Array.isArray(jsonResponse.data) && jsonResponse.data.length >= 4) {
     const imageObj = jsonResponse.data[2];
     predictedImgUri = imageObj?.url || '';
-    prediction = jsonResponse.data[3];
+  
+    const rawPrediction = jsonResponse.data[3];
+    if (typeof rawPrediction === 'string') {
+      if (rawPrediction.startsWith('+1')) {
+        prediction = "Glip Appreciates your help, you've been given 1 CapyCredit!";
+      } else {
+        prediction = "Glip...stares at you.";
+      }
+    } else {
+      prediction = "Glip is confused by the response.";
+    }
   } else {
     prediction = JSON.stringify(jsonResponse, null, 2);
   }
