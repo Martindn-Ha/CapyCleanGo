@@ -78,11 +78,6 @@ export default function Start() {
     setPredictedImgUri(null);
   };
 
-  // Optional: Navigate home (if needed)
-  const handleNav = () => {
-    router.push("/");
-  };
-
   // When "Use" is pressed, call the prediction API with the captured image
   const handleUse = async () => {
     if (uri) {
@@ -165,9 +160,6 @@ export default function Start() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.captureButton}>
             <FontAwesome name="circle" style={styles.captureIcon} onPress={handleCapture} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleNav}>
-            <FontAwesome name="home" style={styles.flipIcon} />
           </TouchableOpacity>
         </View>
       </CameraView>

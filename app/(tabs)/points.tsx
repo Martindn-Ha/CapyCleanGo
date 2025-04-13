@@ -13,6 +13,8 @@ export default function Start() {
         >
             <View style={styles.container}>
                 <Text style={styles.title}>CapyCredits</Text>
+                    <Image source={require('../../assets/images/cute-capybara-spacesuit-moon-vector-illustration_864129-1299.avif')} style={styles.avatar}
+                    />
                 <Text style={{fontSize: 50}}>{points}</Text>
             </View>
         </ImageBackground>
@@ -52,5 +54,12 @@ const styles = StyleSheet.create({
         height: 300,
         resizeMode: 'contain', // Adjust this depending on how you want the image to be displayed
     },
+    avatar: {
+        width: 120,
+        height: 120,
+        borderRadius: 60, // Half of width/height for circle
+        marginVertical: 20,
+        resizeMode: 'cover',
+      }
 })
 
