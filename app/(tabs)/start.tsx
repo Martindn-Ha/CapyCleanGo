@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Text, View } from '@/components/Themed';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Image } from 'expo-image';
+import Entypo from '@expo/vector-icons/Entypo';import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { predictTrash } from '@/api/predict';
 
@@ -78,37 +78,19 @@ export default function Start() {
     setPredictedImgUri(null);
   };
 
-  // Optional: Navigate home (if needed)
-  const handleNav = () => {
-    router.push("/");
-  };
-
   // When "Use" is pressed, call the prediction API with the captured image
   const handleUse = async () => {
     if (uri) {
       setIsPredicting(true);
       setLoading(true);
       try {
-        const result = await predictTrash({ uri });
-        console.log('Filtered prediction result:', result);
-        
-        // Process the returned response:
-        // We assume result.data is an array with four elements, where:
-        // - Index 2: is the image object from which we extract `url`
-        // - Index 3: is the text message to display
-        if (result && Array.isArray(result.data) && result.data.length >= 4) {
-          const imageObj = result.data[2];
-          const message = result.data[3];
-          // Update predictedImgUri only if the image object contains a valid URL
-          if (imageObj && imageObj.url) {
-            setPredictedImgUri(imageObj.url);
-          }
-          // Set the text prediction using the message from the response
-          setPrediction(message);
-        } else {
-          // Fallback if the structure is unexpected
-          setPrediction(JSON.stringify(result, null, 2));
+        const { predictedImgUri, prediction } = await predictTrash({ uri });
+        console.log('Filtered prediction result:', { predictedImgUri, prediction });
+  
+        if (predictedImgUri) {
+          setPredictedImgUri(predictedImgUri);
         }
+        setPrediction(prediction);
       } catch (error) {
         if (error instanceof Error) {
           console.error('Prediction failed:', error.message);
@@ -141,8 +123,9 @@ export default function Start() {
           <>
             <Text style={styles.statusText}>{prediction}</Text>
             <View style={styles.actionButtons}>
-              <Button title="Retake" onPress={handleRetry} />
-              <Button title="Reset" onPress={handleReset} />
+            <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
+              <FontAwesome name="refresh" style={styles.flipIcon}/>
+            </TouchableOpacity>
             </View>
           </>
         )}
@@ -157,10 +140,10 @@ export default function Start() {
         <Image source={{ uri }} style={styles.camera} />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
-            <Text style={styles.flipIcon}>Retake</Text>
+            <FontAwesome name="refresh" style={styles.flipIcon}/>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.useButton} onPress={handleUse}>
-            <Text style={styles.useButtonText}>Use</Text>
+          <TouchableOpacity style={styles.flipButton} onPress={handleUse}>
+            <Entypo name="arrow-bold-right" size={50} color="white" />
           </TouchableOpacity>
         </View>
       </View>
@@ -177,9 +160,6 @@ export default function Start() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.captureButton}>
             <FontAwesome name="circle" style={styles.captureIcon} onPress={handleCapture} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleNav}>
-            <FontAwesome name="home" style={styles.flipIcon} />
           </TouchableOpacity>
         </View>
       </CameraView>
@@ -227,7 +207,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flipIcon: {
-    fontSize: 30,
+    fontSize: 40,
     color: 'white',
   },
   captureButton: {
