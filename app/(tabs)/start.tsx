@@ -89,26 +89,13 @@ export default function Start() {
       setIsPredicting(true);
       setLoading(true);
       try {
-        const result = await predictTrash({ uri });
-        console.log('Filtered prediction result:', result);
-        
-        // Process the returned response:
-        // We assume result.data is an array with four elements, where:
-        // - Index 2: is the image object from which we extract `url`
-        // - Index 3: is the text message to display
-        if (result && Array.isArray(result.data) && result.data.length >= 4) {
-          const imageObj = result.data[2];
-          const message = result.data[3];
-          // Update predictedImgUri only if the image object contains a valid URL
-          if (imageObj && imageObj.url) {
-            setPredictedImgUri(imageObj.url);
-          }
-          // Set the text prediction using the message from the response
-          setPrediction(message);
-        } else {
-          // Fallback if the structure is unexpected
-          setPrediction(JSON.stringify(result, null, 2));
+        const { predictedImgUri, prediction } = await predictTrash({ uri });
+        console.log('Filtered prediction result:', { predictedImgUri, prediction });
+  
+        if (predictedImgUri) {
+          setPredictedImgUri(predictedImgUri);
         }
+        setPrediction(prediction);
       } catch (error) {
         if (error instanceof Error) {
           console.error('Prediction failed:', error.message);
