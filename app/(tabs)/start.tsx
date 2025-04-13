@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Text, View } from '@/components/Themed';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Image } from 'expo-image';
+import Entypo from '@expo/vector-icons/Entypo';import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { predictTrash } from '@/api/predict';
 
@@ -128,8 +128,9 @@ export default function Start() {
           <>
             <Text style={styles.statusText}>{prediction}</Text>
             <View style={styles.actionButtons}>
-              <Button title="Retake" onPress={handleRetry} />
-              <Button title="Reset" onPress={handleReset} />
+            <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
+              <FontAwesome name="refresh" style={styles.flipIcon}/>
+            </TouchableOpacity>
             </View>
           </>
         )}
@@ -144,10 +145,10 @@ export default function Start() {
         <Image source={{ uri }} style={styles.camera} />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
-            <Text style={styles.flipIcon}>Retake</Text>
+            <FontAwesome name="refresh" style={styles.flipIcon}/>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.useButton} onPress={handleUse}>
-            <Text style={styles.useButtonText}>Use</Text>
+          <TouchableOpacity style={styles.flipButton} onPress={handleUse}>
+            <Entypo name="arrow-bold-right" size={50} color="white" />
           </TouchableOpacity>
         </View>
       </View>
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flipIcon: {
-    fontSize: 30,
+    fontSize: 40,
     color: 'white',
   },
   captureButton: {
