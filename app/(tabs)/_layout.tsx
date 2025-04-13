@@ -23,6 +23,8 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
+        
+      {/* index.tsx is the home page */}
         <Tabs.Screen
         name="index"
         options={{
@@ -30,6 +32,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
+            
+      {/* start.tsx is the camera/prediction page */}
       <Tabs.Screen
         name="start"
         options={{
@@ -37,6 +41,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
+
+      {/* points.tsx is the camera/prediction page */}
       <Tabs.Screen
         name="points"
         options={{
