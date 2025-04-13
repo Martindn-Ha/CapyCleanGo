@@ -1,31 +1,33 @@
-import { StyleSheet } from 'react-native';
+// frontend/src/components/PredictComponent.tsx
+import React, { useState } from 'react';
+import { View, Button, Text } from 'react-native';
+import { predictTrash } from '@/api/predict'; // adjust the path if needed
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+const PredictComponent = () => {
+  // Define a local state to store prediction results
+  const [prediction, setPrediction] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-export default function TabTwoScreen() {
+  // Async handler to call the API
+  const handlePredict = async () => {
+    try {
+      setLoading(true);
+      const result = await predictTrash();
+      setPrediction(JSON.stringify(result)); // update with the result
+    } catch (error) {
+      console.error("Prediction failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
+    <View style={{ padding: 20 }}>
+      <Button title="Make Prediction" onPress={handlePredict} />
+      {loading && <Text>Loading...</Text>}
+      {prediction && <Text>Prediction: {prediction}</Text>}
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+export default PredictComponent;
