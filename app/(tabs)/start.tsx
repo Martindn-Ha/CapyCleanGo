@@ -95,10 +95,10 @@ export default function Start() {
       } catch (error) {
         if (error instanceof Error) {
           console.error('Prediction failed:', error.message);
-          setPrediction(`Error: ${error.message}`);
+          setPrediction(`Glip is confused by the response.`);
         } else {
           console.error('Prediction failed:', error);
-          setPrediction(`Error: ${JSON.stringify(error)}`);
+          setPrediction(`Glip thinks something is wrong with you.`);
         }
       } finally {
         setLoading(false);

@@ -4,6 +4,7 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import { navigate } from 'expo-router/build/global-state/routing';
 import {useRouter} from 'expo-router';
+
 export default function Start() {
     const [points, setPoints] = useState(0);
     return (
