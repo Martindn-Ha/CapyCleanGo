@@ -14,7 +14,7 @@ export default function Start() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>CapyClean!</Text>
-            <Image source={require("C:\\Users\\EvanNg21\\Desktop\\hackathon2025\\CapyCleanGo\\tempImg\\IMG_7453.jpg")} style={{ width: 200, height: 200 }} />
+            <Image source={require("../../tempImg/IMG_7453.jpg")} style={{ width: 200, height: 200 }} />
             <TouchableOpacity style={styles.startButton}>
                 <Button title="Start" onPress={handleStart} />
             </TouchableOpacity>
