@@ -35,7 +35,6 @@ export default function App() {
           <TouchableOpacity style={styles.flipButton} onPress={toggleCameraFacing}>
             <FontAwesome name="refresh" style={styles.flipIcon} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.captureButton}>
             <FontAwesome name="circle" style={styles.captureIcon} />
           </TouchableOpacity>
@@ -60,8 +59,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // Distribute space between buttons
-    alignItems: 'flex-end', // Align items at the bottom
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     backgroundColor: 'transparent',
     position: 'absolute',
     bottom: 30,
@@ -69,21 +68,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   flipButton: {
-    // Positioned at bottom-left
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   flipIcon: {
     fontSize: 30,
     color: 'white',
   },
   captureButton: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute', 
+    bottom: 30,
+    left: 0, 
+    right: 0, 
   },
   captureIcon: {
     color: 'white',
-    fontSize: 70, // Bigger circle
+    fontSize: 70, 
   },
 });
