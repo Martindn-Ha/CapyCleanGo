@@ -1,4 +1,4 @@
-import { StyleSheet, Button, TouchableOpacity, Alert,Image} from 'react-native';
+import { StyleSheet, Button, TouchableOpacity, Alert,ImageBackground, Image} from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
@@ -12,13 +12,19 @@ export default function Start() {
         router.push("/(tabs)/start");
     };
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>CapyClean!</Text>
-            <Image source={require("../../tempImg/IMG_7453.jpg")} style={{ width: 200, height: 200 }} />
-            <TouchableOpacity style={styles.startButton}>
-                <Button title="Start" onPress={handleStart} />
-            </TouchableOpacity>
-        </View>
+        <ImageBackground 
+            source={require("../../assets/images/space-background.jpg")} 
+            style={styles.background}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>CapyClean!</Text>
+                <Image source={require("../../assets/images/capy.png")} style={styles.capyImage}/>
+                <Text style={{fontSize: 30}}>Help glip clean the Earth!</Text>
+                <TouchableOpacity style={styles.startButton} onPress={handleStart}>
+                    <Text style={{fontSize: 40, color: "black"}}>Start</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
     );
 }
 
@@ -29,21 +35,32 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: "20%",
     },
+    background: {
+        flex: 1,
+        resizeMode: 'cover', // or 'contain', depending on how you want the image to be displayed
+        justifyContent: 'center',
+    },
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: "lightblue",
+        backgroundColor: "transparent",
     },
     startButton: {
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
         backgroundColor: 'white',
-        width: 80,
-        height: 50,
+        width: 180,
+        height: 60,
         marginTop: "auto",
         marginBottom: "20%",
+        borderRadius: 10,
     },
+    capyImage: {
+        width: 300,
+        height: 300,
+        resizeMode: 'contain', // Adjust this depending on how you want the image to be displayed
+    }
 })
 
 
