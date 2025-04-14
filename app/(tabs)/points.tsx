@@ -27,6 +27,20 @@ export default function Start() {
                     />
                 <Text style={{fontSize: 50}}>{points}</Text>
             </View>
+
+            <View style={styles.container}>
+                <Text style={styles.title2}>Capy Shop</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: "transparent"}}>
+                    <Image source={require("../../assets/images/capy3.png")} style={styles.capy3} />
+                    <Text style={{ fontSize: 50, marginLeft: 10 }}>15</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: "transparent"}}>
+                    <Image source={require("../../assets/images/capy1.png")} style={styles.capy2} />
+                    <Text style={{ fontSize: 50, marginLeft: 10 }}>15</Text>
+                </View>
+            </View>
+
+            
         </ImageBackground>
     );
 }
@@ -37,6 +51,11 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontWeight: 'bold',
         marginTop: "20%",
+    },
+    title2: {
+        fontSize: 50,
+        fontWeight: 'bold',
+        marginTop: -50,
     },
     background: {
         flex: 1,
@@ -70,6 +89,19 @@ const styles = StyleSheet.create({
         borderRadius: 60, 
         marginVertical: 20,
         resizeMode: 'cover',
-      }
+      },
+      capy3: {
+        width: 300,
+        height: 200,
+        padding: 10,
+        resizeMode: 'contain',
+      },
+      capy2: {
+        width: 300,
+        height: 200,
+        padding: 20,
+        resizeMode: 'contain',
+      },
+    
 })
 
