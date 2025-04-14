@@ -1,3 +1,5 @@
+# Too busy to clean up? Stop the CAP! Save the planet with Glip, the one and only CAPY-CAPY-BARA (and get yourself some CapyCredit while you're at it 😉). Clean Up the Cosmos, One Snap at a Time!
+
 ## Inspiration
 
 While I was attending FullyHacks, I noticed a paper bag blowing about in the wind. Nobody really went ahead to throw it away. I figured that I'd do it myself and that’s when I thought "Hey, people would probably be more inclined to throw away trash if was a bit more fun. Having always been interested in machine learning and video games, I thought I'd go ahead and combine something I enjoyed with a real-world problem I just witnessed.
