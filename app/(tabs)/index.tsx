@@ -4,13 +4,60 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import { navigate } from 'expo-router/build/global-state/routing';
 import {useRouter} from 'expo-router';
+import { Audio } from 'expo-av';
+
 
 export default function Start() {
     const router = useRouter();   
+    const sound = useRef<Audio.Sound | null>(null);
 
-    const handleStart = () => {
-        router.push("/(tabs)/start");
+    const playSound = async () => {
+        try {
+            if (sound.current) {
+                await sound.current.unloadAsync();
+            }
+    
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                require('../../assets/audio/capysong.mp3') // ✅ Correct path
+            );
+            sound.current = newSound;
+            await sound.current.playAsync();
+        } catch (error) {
+            console.error("Failed to play sound", error);
+        }
+    };    
+
+    const handleStart = async () => {
+        try {
+            if (sound.current) {
+                await sound.current.unloadAsync();
+            }
+    
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                require('../../assets/audio/capysong.mp3')
+            );
+    
+            sound.current = newSound;
+    
+            await sound.current.setIsLoopingAsync(true); // 🔁 Loop forever
+            await sound.current.playAsync();
+    
+            router.push("/(tabs)/start"); // Navigate immediately
+        } catch (error) {
+            console.error("Failed to play sound", error);
+            router.push("/(tabs)/start"); // Still navigate even if sound fails
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            // Clean up sound when component unmounts
+            if (sound.current) {
+                sound.current.unloadAsync();
+            }
+        };
+    }, []);
+
     return (
         <ImageBackground 
             source={require("../../assets/images/space-background.jpg")} 
