@@ -8,6 +8,8 @@ import { useRouter } from 'expo-router';
 import { predictTrash } from '@/api/predict';
 import { Spinner } from "@/components/ui/spinner";
 import { callIncrement } from '@/app/pointsManager';
+import { ScrollView } from 'react-native';
+
 
 
 export default function Start() {
@@ -115,21 +117,28 @@ export default function Start() {
   if (isPredicting) {
     return (
       <View style={styles.container}>
-        {/* If predictedImgUri is available, show that image; otherwise fallback to the captured image */}
-        {predictedImgUri ? (
-          <Image source={{ uri: predictedImgUri }} style={styles.previewImage} />
-        ) : (
-          uri && <Image source={{ uri }} style={styles.previewImage} />
-        )}
+        <ScrollView
+          maximumZoomScale={3}
+          minimumZoomScale={1}
+          contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+          centerContent={true}
+        >
+          {predictedImgUri ? (
+            <Image source={{ uri: predictedImgUri }} style={styles.previewImage} />
+          ) : (
+            uri && <Image source={{ uri }} style={styles.previewImage} />
+          )}
+        </ScrollView>
+  
         {loading ? (
           <Spinner size="small" />
         ) : (
           <>
             <Text style={styles.statusText}>{prediction}</Text>
             <View style={styles.actionButtons}>
-            <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
-              <FontAwesome name="refresh" style={styles.flipIcon}/>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.flipButton} onPress={handleRetry}>
+                <FontAwesome name="refresh" style={styles.flipIcon} />
+              </TouchableOpacity>
             </View>
           </>
         )}
@@ -185,8 +194,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   previewImage: {
-    width: 200,
-    height: 200,
+    width: 400,
+    height: 400,
     alignSelf: 'center',
     marginBottom: 20,
   },
