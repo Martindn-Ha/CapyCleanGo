@@ -4,24 +4,71 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import { navigate } from 'expo-router/build/global-state/routing';
 import {useRouter} from 'expo-router';
+import { Audio } from 'expo-av';
+
 
 export default function Start() {
     const router = useRouter();   
+    const sound = useRef<Audio.Sound | null>(null);
 
-    const handleStart = () => {
-        router.push("/(tabs)/start");
+    const playSound = async () => {
+        try {
+            if (sound.current) {
+                await sound.current.unloadAsync();
+            }
+    
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                require('../../assets/audio/capysong.mp3') // ✅ Correct path
+            );
+            sound.current = newSound;
+            await sound.current.playAsync();
+        } catch (error) {
+            console.error("Failed to play sound", error);
+        }
+    };    
+
+    const handleStart = async () => {
+        try {
+            if (sound.current) {
+                await sound.current.unloadAsync();
+            }
+    
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                require('../../assets/audio/capysong.mp3')
+            );
+    
+            sound.current = newSound;
+    
+            await sound.current.setIsLoopingAsync(true); // 🔁 Loop forever
+            await sound.current.playAsync();
+    
+            router.push("/(tabs)/start"); // Navigate immediately
+        } catch (error) {
+            console.error("Failed to play sound", error);
+            router.push("/(tabs)/start"); // Still navigate even if sound fails
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            // Clean up sound when component unmounts
+            if (sound.current) {
+                sound.current.unloadAsync();
+            }
+        };
+    }, []);
+
     return (
         <ImageBackground 
             source={require("../../assets/images/space-background.jpg")} 
             style={styles.background}
         >
             <View style={styles.container}>
-                <Text style={styles.title}>CapyClean!</Text>
+                <Image source={require("../../assets/images/CapyClean!.png")} style={styles.capyCleanImage}/>
                 <Image source={require("../../assets/images/capy.png")} style={styles.capyImage}/>
-                <Text style={{fontSize: 30}}>Help glip clean the Earth!</Text>
+                <Text style={{fontSize: 30}}>Help Glip clean the Earth!</Text>
                 <TouchableOpacity style={styles.startButton} onPress={handleStart}>
-                    <Text style={{fontSize: 40, color: "black"}}>Start</Text>
+                    <Text style={{fontSize: 40, color: "black"}}>Go!</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
@@ -37,7 +84,7 @@ const styles = StyleSheet.create({
     },
     background: {
         flex: 1,
-        resizeMode: 'cover', // or 'contain', depending on how you want the image to be displayed
+        resizeMode: 'cover', 
         justifyContent: 'center',
     },
     container: {
@@ -57,9 +104,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     capyImage: {
-        width: 300,
-        height: 300,
-        resizeMode: 'contain', // Adjust this depending on how you want the image to be displayed
+        width: 350,
+        height: 350,
+        resizeMode: 'contain', 
+    },
+    capyCleanImage: {
+        marginTop: 70, 
+        width: 400,   
+        height: 150,     
+        resizeMode: 'stretch',
     }
 })
 
