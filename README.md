@@ -1,4 +1,4 @@
-# Too busy to clean up? Stop the CAP! Save the planet with Glip, the one and only CAPY-CAPY-BARA (and get yourself some CapyCredit while you're at it 😉). Clean Up the Cosmos, One Snap at a Time!
+**Too busy to clean up? Stop the CAP! Save the planet with Glip, the one and only CAPY-CAPY-BARA (and get yourself some CapyCredit while you're at it 😉). Clean Up the Cosmos, One Snap at a Time!**
 
 ## Inspiration
 
