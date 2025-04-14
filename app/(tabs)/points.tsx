@@ -6,7 +6,7 @@ import { registerIncrement } from '@/app/pointsManager';
 export default function Start() {
   const [points, setPoints] = useState(0);
 
-  const swayAnim = useRef(new Animated.Value(0)).current; // For swaying
+  const swayAnim = useRef(new Animated.Value(0)).current; // For rotating sway
   const hopAnim = useRef(new Animated.Value(0)).current;  // For hopping
 
   const incrementPoints = () => setPoints((prev) => prev + 1);
@@ -76,9 +76,9 @@ export default function Start() {
               {
                 transform: [
                   {
-                    translateX: swayAnim.interpolate({
+                    rotate: swayAnim.interpolate({
                       inputRange: [-1, 1],
-                      outputRange: [-5, 5], // slight left-right sway
+                      outputRange: ['-5deg', '5deg'], // slight side-to-side sway
                     }),
                   },
                 ],
