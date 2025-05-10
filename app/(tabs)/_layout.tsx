@@ -6,8 +6,8 @@ import { Pressable } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
@@ -22,29 +22,33 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: false,
       }}>
+        
+      {/* index.tsx is the home page */}
         <Tabs.Screen
         name="index"
         options={{
-          title: 'start-page',
+          title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
+            
+      {/* start.tsx is the camera/prediction page */}
       <Tabs.Screen
         name="start"
         options={{
           title: 'Camera',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="camera" color={color} />,
         }}
       />
+
+      {/* points.tsx is the camera/prediction page */}
       <Tabs.Screen
         name="points"
         options={{
           title: 'Points',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome6 name="ranking-star" size={28} color={color} />,
         }}
       />
     </Tabs>
